@@ -1,0 +1,80 @@
+<app-modal-entry></app-modal-entry>
+<div class="container">
+    <mat-toolbar class="toolbar" color="primary">
+        <mat-toolbar-row>
+            <mat-icon>search</mat-icon>
+            <span>{{username}}'s dic</span>
+            <mat-form-field class="tagsearch searchinput">
+                <mat-label>search tags</mat-label>
+                <input [(ngModel)]="searchInput" (ngModelChange)="search()" type="text" matInput matType="text" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field class="tagsearch selection">
+                <mat-label>tags selection</mat-label>
+                <mat-select [(ngModel)]="selectTags" (selectionChange)="selecttags()" multiple>
+                    <mat-option *ngFor="let tagName of tagNames" value="{{tagName}}">
+                        {{tagName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <span style="flex: auto;"></span>
+            <button *ngIf="loginStatus; else logoutButton" class="logbtn" mat-raised-button (click)='login()'>
+                <span>login</span>
+            </button>
+            <ng-template #logoutButton>
+                <button class="logbtn" mat-raised-button (click)='logout()'>
+                    <span>logout</span>
+                </button>
+            </ng-template>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)='selectGenre("all")'>
+                    <mat-icon>bookmarks</mat-icon>
+                    <span>all list</span>
+                </button>
+                <button mat-menu-item (click)='selectGenre("study")'>
+                    <mat-icon>book</mat-icon>
+                    <span>study list</span>
+                </button>
+                <button mat-menu-item (click)='selectGenre("jobs")'>
+                    <mat-icon>work</mat-icon>
+                    <span>jobs list</span>
+                </button>
+                <button mat-menu-item (click)='selectGenre("shopping")'>
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    <span>shopping list</span>
+                </button>
+                <button mat-menu-item (click)='selectGenre("movie")'>
+                    <mat-icon>movie</mat-icon>
+                    <span>movie list</span>
+                </button>
+                <button mat-menu-item (click)='selectGenre("etc")'>
+                    <mat-icon>star_border</mat-icon>
+                    <span>etc list</span>
+                </button>
+            </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <a mat-fab color="basic" class="fab" (click)="addDic()">
+        <mat-icon>add</mat-icon>
+    </a>
+    <div class="contents-wrapper">
+        <div class="contents">
+        <p *ngIf="tokenError;" style="color: red; text-align: center; font-size: 14px;">{{tokenErrorMessage}}</p>
+        <mat-card *ngFor="let item of data; index as i" class="parentcard" (click)="detailget(item, i)">
+            <div class="childcardimg">
+                <img class="siteimage" src="{{item.imageurl}}">
+                <figcaption><a class="url" href="{{item.url}}" target = "_blank">{{item.url}}</a></figcaption>
+            </div>
+            <div class="childcardcontent">
+                <h2>{{item.title}}</h2>
+                <!-- <mat-card-content> -->
+                    <p><span class="genre">{{item.genre}}</span></p>
+                    <span class="tags" *ngFor="let tag of item['tags'].split(',')">{{tag}}</span>
+                <!-- </mat-card-content> -->
+            </div>
+        </mat-card>
+        </div>
+    </div>
+</div>

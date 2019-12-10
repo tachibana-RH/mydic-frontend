@@ -1,0 +1,102 @@
+.container {
+    position: relative;
+}
+.siteinfo {
+    text-align: center;
+    font-size: 5px;
+    color: gray;
+    word-break: break-all;
+}
+.siteimage {
+    width: 380px;
+    margin-top: 10px;
+    border: 1px solid grey;
+}
+.contents {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 30px;
+    p {
+        font-size: 18px;
+    }
+}
+.btn {
+    position: absolute;
+    bottom: -100px;
+    cursor: pointer;
+}
+.delete {
+    position: absolute;
+    background-color: red;
+    color: white;
+    right: -80px;
+    cursor: pointer;
+}
+.movesite {
+    margin-left: 15px;
+}
+.genre {
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    padding: 3px 8px 3px 8px;
+    margin: 1px;
+}
+.taggroup {
+    display: block;
+    margin-top: 25px;
+}
+.tags {
+    background-color: yellowgreen;
+    color: white;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 1px;
+}
+.property {
+    position: absolute;
+    top: -11px;
+    right: 5px;
+}
+.cancelIcon {
+    display: none;
+}
+.overview {
+    height: 100px;
+    overflow: auto;
+    border-left: 1px double grey;
+    border-right: 1px double grey;
+    margin-bottom: 12.5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+@media screen and (max-width:710px){
+    // .contents {
+    //     h2 {
+    //         font-size: 14px;
+    //     }
+    // }
+    .tags {
+        font-size: 11px;
+    }
+    .siteimage {
+        width: 310px;
+    }
+    .btn {
+        bottom: -60px;
+        left: 15px;
+    }
+    .delete {
+        position: static;
+        margin-left: 15px;
+    }
+    .cancelIcon {
+        display: block;
+        position: absolute;
+        top: -30px;
+        right: -5px;
+        color: red;
+        cursor: pointer;
+    }
+}

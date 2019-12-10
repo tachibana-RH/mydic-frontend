@@ -1,0 +1,26 @@
+<div class="cancelIcon" (click)="close()">
+    <mat-icon>highlight_off</mat-icon>
+</div>
+<div class="property">
+    <p><span class="genre">{{item.genre}}</span></p>
+</div>
+<div class="container">
+    <div class="siteinfo">
+        <img class="siteimage" src="{{item.imageurl}}">
+    </div>
+    <div class="contents">
+        <div class="overview">
+            <div class="overview-inner" *ngFor="let overview of item.overview.split('\n')">{{overview}}</div>
+        </div>
+        <div class="taggroup">
+            <span class="tags" *ngFor="let tag of item.tags.split(',')">{{tag}}</span>
+        </div>
+    </div>
+    <div class="btn">
+        <button (click)="edit()" mat-raised-button color="primary">edit</button>
+        <a class="movesite" href="{{item.url}}" target = "_blank"><button mat-raised-button color="basic">this site open</button></a>
+        <button class="delete" (click)="delete()" mat-raised-button>
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</div>

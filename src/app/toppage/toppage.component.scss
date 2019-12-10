@@ -1,0 +1,28 @@
+.explanations {
+    width: 60%;
+    height: 450px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+.startforms {
+    margin: 2%;
+    text-align: center;
+}
+.guidimg {
+    width: 450px;
+    padding-top: 20px;
+}
+@media screen and (max-width:710px){
+    .explanations {
+        width: 85%;
+        height: 400px;
+    }
+    .guidimg {
+        width: 300px;
+        padding-top: 20px;
+    }
+    .startforms {
+        margin: 5%;
+    }
+}

@@ -1,0 +1,130 @@
+.toolbar {
+    position: fixed;
+    z-index: 5;
+}
+.tagsearch {
+    margin-left: 5%;
+    font-size: 12px;
+}
+.selection {
+    margin-left: 2%;
+}
+.fab {
+    z-index: 5;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+}
+.logbtn {
+    margin-right: 1%;
+}
+.contents-wrapper {
+    margin-bottom: 10px;
+    padding-top: 75px;
+
+    .contents {
+        display: block;
+        margin-left: 4.5%;
+        padding-bottom: 5px;
+    }
+    .parentcard {
+        position: relative;
+        margin: 1%;
+        width: 43%;
+        display: inline-block;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .parentcard:hover {
+        transform: translateX(-10px);
+        transform: translateY(-10px);
+        box-shadow: 10px 10px gray;
+        z-index: 2;
+    }
+    .childcardimg {
+        display: block;
+        word-break: break-all;
+    }
+    .childcardcontent {
+        display: block;
+    }
+    .siteimage {
+        width: 50%;
+        height: auto;
+        border: 1px double grey;
+    }
+    .genre {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 14px;
+        padding: 5px 10px 5px 10px;
+        background-color: gainsboro;
+        border-radius: 0 5px 0 5px;
+    }
+    .tags {
+        background-color: yellowgreen;
+        color: white;
+        font-size: 14px;
+        padding: 5px;
+        border-radius: 5px;
+        margin: 1px;
+    }
+    .detailbtn {
+        margin-left: 8px;
+    }
+    .url {
+        font-size: 10px;
+    }
+}
+::ng-deep snack-bar-container.guestinfo-bar {
+    color: white;
+}
+@media screen and (max-width:710px){
+    .toolbar {
+        padding-bottom: 40px;
+    }
+    .logbtn {
+        margin-right: 3.5%;
+    }
+    .contents-wrapper {
+        padding-top: 100px;
+        .contents {
+            margin-left: 0%;
+        }
+        .parentcard {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            width: 70%;
+            display: block;
+        }
+        .childcardcontent {
+            h2 {
+                font-size: 16px;
+            }
+            .genre {
+                font-size: 12px;
+                padding: 4px;
+            }
+            .tags {
+                font-size: 11px;
+            }
+        }
+    }
+    .searchinput {
+        display: none;
+    }
+    .tagsearch {
+        position: fixed;
+        top: 50px;
+        left: 0px;
+    }
+    .selection {
+        left: 0px;
+    }
+    .fab {
+        bottom: 30px;
+    }
+}

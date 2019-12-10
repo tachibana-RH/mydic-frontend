@@ -1,0 +1,74 @@
+[
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test1",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test2",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test3",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test4",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test5",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"study",
+        "tags":"tag1,tag2,tag3",
+        "title":"test6",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"movie",
+        "tags":"tag1,tag2,tag3",
+        "title":"test7",
+        "overview":"test contents"
+    },
+    {
+        "sitetitle":"sitetitle",
+        "url":"/test",
+        "imageurl":"/assets/images/スクリーンショット 2019-10-31 20.04.34.png",
+        "genre":"movie",
+        "tags":"tag6",
+        "title":"test8",
+        "overview":"test contents"
+    }
+]

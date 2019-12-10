@@ -1,0 +1,53 @@
+<div class="container">
+    <form class="contentsForm" [formGroup]="contentsInfo">
+        <div class="form-field"><mat-form-field>
+            <input class="inputBox" type="url" matInput matType="url"
+            formControlName="url"
+            placeholder="site url"
+            autocomplete="off">
+        </mat-form-field></div>
+        <div class="form-field"><mat-form-field>
+            <mat-select class="inputBox" formControlName="genre" aria-placeholder="genre">
+                <mat-option *ngFor="let item of genreOption" value="{{item}}">
+                    {{item}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field></div>
+        <div class="editorTag">
+        <div class="form-field textoverlay-wrap" style="position: relative;"><mat-form-field>
+            <div class="textoverlay">
+                <span *ngFor="let tag of tags" class="tags">
+                    {{tag}}
+                </span>
+            </div>
+            <input class="inputBox" class="tagsInput" type="text" matInput matType="text"
+            formControlName="tags"
+            placeholder="tags (スペース区切りで5つまで入力)"
+            autocomplete="off"
+            (keyup.space)="createTags()"
+            (keyup.backspace)="deleteTagsAll()"
+            (keydown.backspace)="deleteTags()"
+            (focus)="tagEdit()"
+            (blur)="makeTagsAll()"
+            spellcheck="false">
+        </mat-form-field></div>
+        </div>
+        <div class="form-field"><mat-form-field>
+            <input class="inputBox" type="text" matInput matType="text"
+            formControlName="title"
+            placeholder="contents title (30字以内で入力)"
+            autocomplete="off">
+        </mat-form-field></div>
+        <div class="form-field"><mat-form-field>
+            <textarea class="inputBox" type="text" matInput matType="text"
+            formControlName="overview"
+            placeholder="contents overview (300字以内で入力)">
+            </textarea>
+        </mat-form-field></div>
+        <button *ngIf="operationName === 'create'; else editBtn" class="btn" mat-raised-button color="primary" (click)="create()" [disabled]="contentsInfo.invalid">regist</button>
+        <ng-template #editBtn>
+            <button class="btn" mat-raised-button color="primary" (click)="edit()" [disabled]="contentsInfo.invalid">edit</button>
+        </ng-template>
+        <button class="btn cancel" (click)="cancel()" mat-raised-button color="basic">cancel</button>
+    </form>
+</div>

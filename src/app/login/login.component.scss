@@ -1,0 +1,58 @@
+.socialauths {
+    text-align: center;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    background-color: rgb(235, 255, 252);
+}
+.authbtn {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-size: 16px;
+    color: white;
+}
+.google {
+    background-color: orangered;
+}
+.twitter {
+    background-color: lightskyblue;
+}
+.github {
+    color: black;
+}
+.basicauth {
+    text-align: center;
+}
+.mat-form-field {
+    width: 60%;
+}
+.regist-wrapper {
+    padding-top: 30px;
+    padding-bottom: 200px;
+    text-align: center;
+}
+.submitbtn {
+    margin: 5px;
+}
+.registmessage {
+    text-align: center;
+    padding: 10px;
+    br {
+        display: none;
+    }
+}
+::ng-deep snack-bar-container.loginregist-bar {
+    color: red;
+    text-align: center;
+}
+::ng-deep snack-bar-container.newregist-bar {
+    color: red;
+    text-align: center;
+}
+
+@media screen and (max-width:710px){
+    .registmessage {
+        br {
+            display: inline;
+        }
+    }
+}

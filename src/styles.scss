@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: aliceblue
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.fadein {
+    opacity: 0;
+    transform : translate(0, 50px);
+    transition : all 1500ms;
+}
+.fadein.scrollin{
+    opacity: 1;
+    transform: translate(0, 0);
+}

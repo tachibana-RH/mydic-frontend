@@ -1,0 +1,18 @@
+<mat-card class="parentcard">
+    <p *ngIf="resultmsg;">{{message}}</p>
+    <form [formGroup]="pwControl">
+        <div class="form-field"><mat-form-field>
+            <input type="password" matInput matType="password"
+            formControlName="password"
+            placeholder="password" autocomplete="off">
+        </mat-form-field></div>
+        <div class="form-field"><mat-form-field>
+            <input #retryps type="password" matInput matType="password"
+            formControlName="retrypassword"
+            placeholder="retry same password" autocomplete="off"
+            (input)="pwcheck()">
+        </mat-form-field></div>
+        <br>
+        <button class="submitbtn" color="primary" mat-raised-button (click)="pwregist()" [disabled]="pwControl.invalid || isPwcheckDisabled">password registration</button>
+    </form>
+</mat-card>

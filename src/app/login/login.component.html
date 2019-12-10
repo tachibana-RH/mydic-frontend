@@ -1,0 +1,45 @@
+<mat-tab-group>
+        <mat-tab label="sign in">
+            <div class="login-wrapper">
+                <div class="socialauths">
+                    <button mat-raised-button class="authbtn google" (click)="oauth('google')"> Google </button>
+                    <!-- <button mat-raised-button class="authbtn twitter" (click)="oauth('twitter')">Twitter Auth</button> -->
+                    <button mat-raised-button class="authbtn github" (click)="oauth('github')"> github </button>
+                </div>
+                <form [formGroup]="loginControl" class="basicauth">
+                    <p> Basic </p>
+                    <div class="form-field"><mat-form-field>
+                        <input type="email" matInput matType="email"
+                        formControlName="email"
+                        placeholder="mail address" autocomplete="off">
+                    </mat-form-field></div>
+                    <div class="form-field"><mat-form-field>
+                        <input type="password" matInput matType="password"
+                        formControlName="password"
+                        placeholder="password" autocomplete="off">
+                    </mat-form-field></div>
+                    <br>
+                    <button class="submitbtn" color="primary" mat-raised-button (click)="login()" [disabled]="loginControl.invalid">sign in</button>
+                </form>
+            </div>
+        </mat-tab>
+        <mat-tab label="sign up">
+            <div class="regist-wrapper">
+                <p *ngIf="registMessage;" class="registmessage">ご登録いただいたアドレスへ<br>メールを送信しました。</p>
+                <form [formGroup]="registControl" class="registforms">
+                    <div class="form-field"><mat-form-field>
+                        <input type="text" matInput matType="text"
+                        formControlName="name"
+                        placeholder="your name(10文字以内)" autocomplete="off">
+                    </mat-form-field></div>
+                    <div class="form-field"><mat-form-field>
+                        <input type="email" matInput matType="email"
+                        formControlName="email"
+                        placeholder="mail address" autocomplete="off">
+                    </mat-form-field></div>
+                    <br>
+                    <button class="submitbtn" mat-raised-button (click)="regist()" [disabled]="registControl.invalid">sign up</button>
+                </form>
+            </div>
+        </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,89 @@
+.containar {
+    position: relative;
+}
+.contentsForm {
+    text-align: center;
+    padding-top: 10px;
+}
+.btn {
+    position: absolute;
+    left:0;
+    bottom: -50px;
+}
+.cancel {
+    left: 80px;
+}
+.tags {
+    background-color: rgb(131, 218, 0);
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 16px;
+    display: inline;
+}
+.tagsInput {
+    // color: white;
+    // caret-color: white;
+}
+.textoverlay {
+    position: absolute;
+}
+.mat-form-field {
+    width: 90%;
+}
+::ng-deep snack-bar-container.contentsregist-bar {
+    color: white;
+}
+::ng-deep snack-bar-container.contentsedit-bar {
+    color: white;
+}
+// .textoverlay-wrap {
+//     margin: 0px;
+//     padding: 0px;
+//     overflow: hidden;
+//     display: block;
+//     // position: relative;
+// }
+// .textoverlay {
+//     // letter-spacing: .02em;
+//     // padding-top: 2px!important;
+//     // padding-bottom: 3px!important;
+//     // line-height: 26px;
+//     // margin-top: -1px;
+//     white-space: pre;
+//     // font-size: 14px!important;
+
+//     position: absolute;
+//     color: transparent;
+//     white-space: pre-wrap;
+//     overflow-wrap: break-word;
+//     overflow: hidden;
+//     margin: 0px;
+//     // padding: 6px 12px;
+//     font-family: -apple-system, system-ui, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", メイリオ, meiryo, sans-serif;
+//     // font-weight: 400;
+//     // font-size: 14px;
+//     background-color: rgb(255, 255, 255);
+//     // top: 1px;
+//     // right: 1px;
+//     // bottom: 1px;
+//     // left: 1px;
+// }
+
+// @media screen and (max-width:710px){
+//     .card-containar {
+//         width: 60%;
+//         left: 17%;
+//         top:10%;
+//     }
+// }
+
+// @media screen and (max-width:500px){
+//     .card-containar {
+//         width: 80%;
+//         left: 7%;
+//         top:10%;
+//     }
+// }
