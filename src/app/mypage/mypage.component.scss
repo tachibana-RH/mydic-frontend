@@ -12,14 +12,14 @@
 .fab {
     z-index: 5;
     position: fixed;
-    bottom: 50px;
+    bottom: 80px;
     right: 50px;
 }
 .logbtn {
     margin-right: 1%;
 }
 .contents-wrapper {
-    margin-bottom: 10px;
+    margin-bottom: 70px;
     padding-top: 75px;
 
     .contents {
@@ -60,7 +60,7 @@
         font-size: 14px;
         padding: 5px 10px 5px 10px;
         background-color: gainsboro;
-        border-radius: 0 5px 0 5px;
+        border-radius: 0 5px 0 0;
     }
     .tags {
         background-color: yellowgreen;
@@ -89,6 +89,7 @@
     }
     .contents-wrapper {
         padding-top: 100px;
+        margin-bottom: 40px;
         .contents {
             margin-left: 0%;
         }
@@ -125,6 +126,7 @@
         left: 0px;
     }
     .fab {
-        bottom: 30px;
+        bottom: 60px;
+        right: 30px;
     }
 }

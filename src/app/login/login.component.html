@@ -2,9 +2,9 @@
         <mat-tab label="sign in">
             <div class="login-wrapper">
                 <div class="socialauths">
-                    <button mat-raised-button class="authbtn google" (click)="oauth('google')"> Google </button>
+                    <button mat-raised-button class="authbtn google" (click)="oauth('google')"><i class="fab fa-google"></i> Google </button>
                     <!-- <button mat-raised-button class="authbtn twitter" (click)="oauth('twitter')">Twitter Auth</button> -->
-                    <button mat-raised-button class="authbtn github" (click)="oauth('github')"> github </button>
+                    <button mat-raised-button class="authbtn github" (click)="oauth('github')"><i class="fab fa-github"></i> github </button>
                 </div>
                 <form [formGroup]="loginControl" class="basicauth">
                     <p> Basic </p>
@@ -25,7 +25,7 @@
         </mat-tab>
         <mat-tab label="sign up">
             <div class="regist-wrapper">
-                <p *ngIf="registMessage;" class="registmessage">ご登録いただいたアドレスへ<br>メールを送信しました。</p>
+                <!-- <p *ngIf="registMessage;" class="registmessage">ご登録いただいたアドレスへ<br>メールを送信しました。</p> -->
                 <form [formGroup]="registControl" class="registforms">
                     <div class="form-field"><mat-form-field>
                         <input type="text" matInput matType="text"

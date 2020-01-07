@@ -1,30 +1,29 @@
+<div class="wrapper">
+<h1>Webサイト管理アプリ</h1>
+<br>
 <div class="container">
-    <br><br>
     <mat-card class="explanations">
         <mat-tab-group>
             <mat-tab label="このサービスについて">
                 <img class="guidimg" src="/assets/images/一覧.png">
-                <h3>1/4</h3>
-                <p>色々なウェブサイトを保存できるサービスです。</p>
+                <p id="tab1">ウェブサイトにメモをつけて<br>管理できるサービスです。</p>
             </mat-tab>
             <mat-tab label="サイトの保存">
                 <img class="guidimg" src="/assets/images/新規登録.png">
-                <h3>2/4</h3>
-                <p>ウェブサイトに自分なりのメモを付けて保存できます。</p>
+                <p id="tab2">ウェブサイトに関するメモや<br>検索タグなどを付けて保存できます。</p>
             </mat-tab>
-            <mat-tab label="ジャンルでの絞り込み">
+            <mat-tab label="ジャンル検索">
                 <img class="guidimg" src="/assets/images/ジャンル検索.png">
-                <h3>3/4</h3>
-                <p>指定したジャンルで絞り込みを行えます。</p>
+                <p id="tab3">保存時に指定したジャンルで<br>絞り込みを行えます。</p>
             </mat-tab>
-            <mat-tab label="タグでの絞り込み">
+            <mat-tab label="タグ検索">
                 <img class="guidimg" src="/assets/images/タグ検索.png">
-                <h3>4/4</h3>
-                <p>登録したタグをドロップダウンで選択して検索できます。</p>
+                <p id="tab4">登録したタグをドロップダウンで<br>選択して検索できます。</p>
             </mat-tab>
         </mat-tab-group>
     </mat-card>
-    <form class="startforms">
-        <button class="startbtn" color="primary" mat-raised-button (click)="guestlogin()">Use for trial</button>
-    </form>
+</div>
+<form class="startforms">
+    <button id="guestUserCreateButton" class="startbtn" color="primary" mat-raised-button (click)="guestlogin()">Use for trial</button>
+</form>
 </div>

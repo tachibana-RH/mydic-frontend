@@ -5,6 +5,19 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 
+interface itemProps {
+  id: number;
+  user_id: number;
+  title: string;
+  url: string;
+  imageurl: string;
+  genre: string;
+  tags: string;
+  overview: string;
+  created_at: string;
+  updated_at: string;
+}
+
   /**
    * モーダル画面の作成・削除を行うDIクラス
    */
@@ -17,13 +30,13 @@ export class ModalService {
   private contentSource: Subject<boolean> = new Subject<boolean>();
   public content$ = this.contentSource.asObservable();
 
-  private registdata: Subject<object> = new Subject<object>();
+  private registdata: Subject<itemProps> = new Subject<itemProps>();
   public regist$ = this.registdata.asObservable();
 
-  private editdata: Subject<object> = new Subject<object>();
+  private editdata: Subject<itemProps> = new Subject<itemProps>();
   public edit$ = this.editdata.asObservable();
 
-  private deletedata: Subject<number> = new Subject<number>();
+  private deletedata: Subject<itemProps> = new Subject<itemProps>();
   public delete$ = this.deletedata.asObservable();
 
   constructor(private resolver: ComponentFactoryResolver) { }
@@ -74,7 +87,7 @@ export class ModalService {
    * @description
    * 登録したコンテンツデータをマイページのコンポーネントで宣言したsubscriptionに対して流す
    */
-  registContents(data:object): void {
+  registContents(data:itemProps): void {
     this.registdata.next(data);
   }
   /**
@@ -85,7 +98,7 @@ export class ModalService {
    * @description
    * 更新したコンテンツデータをマイページのコンポーネントで宣言したsubscriptionに対して流す
    */
-  editContents(data:object): void {
+  editContents(data:itemProps): void {
     this.editdata.next(data);
   }
   /**
@@ -96,7 +109,7 @@ export class ModalService {
    * @description
    * 削除したコンテンツのインデックスをマイページのコンポーネントで宣言したsubscriptionに対して流す
    */
-  deleteContents(data:number): void {
+  deleteContents(data:itemProps): void {
     this.deletedata.next(data);
   }
 }

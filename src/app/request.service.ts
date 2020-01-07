@@ -14,7 +14,6 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class RequestService {
-  public clientOb:Observable<any>;
   private httpOptions: any = {
     // ヘッダ情報
     headers: new HttpHeaders({
@@ -30,14 +29,14 @@ export class RequestService {
    *
    * @param {string} path  ユーザーの新規登録を行うサーバーのパス名（signup）
    * @param {object} body  Emailとユーザー名のフォームデータ
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * ユーザーの新規登録処理にリクエストを送るObservableを作成する
    */
-  public setRegistration(path:string,body:object) :void {
+  public setRegistration(path:string,body:object) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.post(`${this.apiUrl}/auth/${path}`,body,this.httpOptions);
+    return this.client.post(`${this.apiUrl}/auth/${path}`,body,this.httpOptions);
   }
   /**
    * パスワードの登録処理
@@ -45,96 +44,110 @@ export class RequestService {
    * @param {string} path  パスワード登録を行うサーバーのパス名（pwregist）
    * @param {object} body  登録するパスワードのフォームデータ
    * @param {string} token 本人確認と登録期限確認を行うトークン
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * パスワードの登録処理にリクエストを送るObservableを作成する
    */
-  public setBasicPw(path:string, body:object, token:string) :void {
+  public setBasicPw(path:string, body:object, token:string) :Observable<any> {
     this.setAuthorization(token);
-    this.clientOb = this.client.post(`${this.apiUrl}/auth/${path}`, body, this.httpOptions);
+    return this.client.post(`${this.apiUrl}/auth/${path}`, body, this.httpOptions);
   }
   /**
    * ベーシックのログイン処理
    *
    * @param {string} path  ベーシックログインを行うサーバーのパス名（basic）
    * @param {object} body  Emailとパスワードのフォームデータ
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * パスワードの登録処理にリクエストを送るObservableを作成する
    */
-  public setBasic(path:string, body:object) :void {
+  public setBasic(path:string, body:object) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.post(`${this.apiUrl}/auth/${path}`, body, this.httpOptions);
+    return this.client.post(`${this.apiUrl}/auth/${path}`, body, this.httpOptions);
   }
   /**
    * 認証トークンの取得処理
    *
-   * @param {string} path 認証トークンの取得を行うサーバーのパス名（basic or google or github or guestlogin）
-   * @returns {void}
+   * @param {string} path 認証トークンの取得を行うサーバーのパス名（basic or guestlogin）
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * 認証トークンの取得処理にリクエストを送るObservableを作成する
    */
-  public setAuth(path:string) :void {
+  public setAuth(path:string) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.post(`${this.apiUrl}/auth/${path}`,this.httpOptions);
+    return this.client.post<any>(`${this.apiUrl}/auth/${path}`,this.httpOptions);
   }
   /**
    * コンテンツの読み込み処理
    *
    * @param {string} path 読み込み処理を行うサーバーのパス名（guestGetContents or getContents）
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * コンテンツ読み込み処理にリクエストを送るObservableを作成する
    */
-  public setAppGet(path:string) :void {
+  public setAppGet(path:string) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.get(`${this.apiUrl}/app/${path}`,this.httpOptions);
+    return this.client.get(`${this.apiUrl}/app/${path}`,this.httpOptions);
   }
   /**
    * コンテンツの登録処理
    *
    * @param {string} path 登録処理を行うサーバーのパス名（guestRegistContents or registContents）
    * @param {object} body 登録対象コンテンツのフォームデータ
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * コンテンツ登録処理にリクエストを送るObservableを作成する
    */
-  public setAppPost(path:string,body:object) :void {
+  public setAppPost(path:string,body:object) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.post(`${this.apiUrl}/app/${path}`,body,this.httpOptions);
+    return this.client.post(`${this.apiUrl}/app/${path}`,body,this.httpOptions);
   }
   /**
    * コンテンツの更新処理
    *
    * @param {string} path 更新処理を行うサーバーのパス名（guestEditContents or editContents）
    * @param {object} body 更新対象コンテンツのフォームデータ
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * コンテンツ更新処理にリクエストを送るObservableを作成する
    */
-  public setAppPut(path:string, body:object) :void {
+  public setAppPut(path:string, body:object) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.put(`${this.apiUrl}/app/${path}`,body,this.httpOptions);    
+    return this.client.put(`${this.apiUrl}/app/${path}`,body,this.httpOptions);
   }
   /**
    * コンテンツの削除処理
    *
    * @param {string} path 削除処理を行うサーバーのパス名（guestDeleteContents or DeleteContents）
    * @param {object} body 削除対象コンテンツのフォームデータ
-   * @returns {void}
+   * @returns {Observable}
    * @memberof RequestService
    * @description
    * コンテンツ削除処理にリクエストを送るObservableを作成する
    */
-  public setAppDelete(path:string,body:object) :void {
+  public setAppDelete(path:string,body:object) :Observable<any> {
     this.headerSet();
-    this.clientOb = this.client.delete(`${this.apiUrl}/app/${path}/${body['contentsId']}`,this.httpOptions);
+    return this.client.delete(`${this.apiUrl}/app/${path}/${body['contentsId']}`,this.httpOptions);
+  }
+  /**
+   * お問い合わせ処理
+   *
+   * @param {string} path  お問い合わせの送信を行うサーバーのパス名（contact）
+   * @param {object} body  お問い合わせ内容のフォームデータ
+   * @returns {Observable}
+   * @memberof RequestService
+   * @description
+   * お問い合わせ処理にリクエストを送るObservableを作成する
+   */
+  public setContact(path:string,body:object) :Observable<any> {
+    this.headerSet();
+    return this.client.post(`${this.apiUrl}/auth/${path}`,body,this.httpOptions);
   }
   /**
    * Authorizatino に認証トークンを設定するメソッドの呼び出し元
@@ -169,10 +182,10 @@ export class RequestService {
    * @returns {void}
    * @memberof RequestService
    * @description
-   * トークンを動的に設定できるようメソッド化している
+   * トークンを動的に設定できるようメソッド化
    * Bearer トークンをヘッダに設定したい場合はこのメソッドを利用する
    */
-  public setAuthorization(token: string = null): void {
+  private setAuthorization(token: string = null): void {
     if (!token) {
       return;
     }

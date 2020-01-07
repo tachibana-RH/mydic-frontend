@@ -15,6 +15,34 @@ import { LoginComponent }  from '../login/login.component';
 import { environment } from '../../environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+interface initItemProps {
+  username:string;
+  contents: [{
+    id: number;
+    user_id: number;
+    title: string;
+    url: string;
+    imageurl: string;
+    genre: string;
+    tags: string;
+    overview: string;
+    created_at: string;
+    updated_at: string;
+  }];
+}
+
+interface itemProps {
+  id: number;
+  user_id: number;
+  title: string;
+  url: string;
+  imageurl: string;
+  genre: string;
+  tags: string;
+  overview: string;
+  created_at: string;
+  updated_at: string;
+}
 
 @Component({
   selector: 'app-mypage',
@@ -26,23 +54,19 @@ export class MypageComponent implements OnInit {
 
   public username:string;
   public genreControl:FormGroup;
-  public data:string[];
+  public data:itemProps[];
   public searchInput:string;
-  public selectTags:string;
+  public selectTags:string[];
   public tagNames:string[]=[];
   public apiurl:string;
   public loginStatus:boolean;
   public tokenError:boolean;
   public tokenErrorMessage:string;
 
-  private dataOrigin:string[];
-  private dataCurrent:string[];
-  private dataTemp:string[];
-  private searchValue:string[];
-  private searchCount:number;
-  private matchCount:number;
-  private selectTagsData:string;
-  private expiredDate:Date;
+  private reqObservable:any;
+  private dataOrigin:itemProps[] = [];
+  private dataGenre:itemProps[];
+  private currentGenre:string;
   private subscription: Subscription;
 
   constructor(
@@ -60,11 +84,11 @@ export class MypageComponent implements OnInit {
   ngOnInit() {
     //　認証リダイレクト後のトークン取得処理
     if(this.route.snapshot.paramMap['params']['token'] !== undefined) {
-      this.expiredDate = new Date();
-      this.expiredDate.setDate(this.expiredDate.getDate()+1);
+      let expiredDate:Date = new Date();
+      expiredDate.setDate(expiredDate.getDate()+1);
       this.cookieService.set('authToken',
         this.route.snapshot.paramMap['params']['token'],
-        this.expiredDate,
+        expiredDate,
         '/'
         );
       this.router.navigate(['mypage']);
@@ -74,17 +98,17 @@ export class MypageComponent implements OnInit {
     this.subscription = this.modalS.regist$
     .subscribe(value => {
       this.dataRegist(value);
-      this.contentsSet();
+      this.selectGenre(this.currentGenre);
     });
     this.subscription = this.modalS.edit$
     .subscribe(value => {
       this.dataEdit(value);
-      this.contentsSet();
+      this.selectGenre(this.currentGenre);
     });
     this.subscription = this.modalS.delete$
     .subscribe(value => {
       this.dataDelete(value);
-      this.contentsSet();
+      this.selectGenre(this.currentGenre);
     });
 
     this.genreControl = new FormGroup({
@@ -93,7 +117,7 @@ export class MypageComponent implements OnInit {
     //　ゲストユーザーとログイン後ユーザーで作成するobservableを分ける
     if (this.cookieService.get('authToken') === '') {
       this.loginStatus = true;
-      this.requestS.setAppGet('guestGetContents');
+      this.reqObservable = this.requestS.setAppGet('guestGetContents');
       this.snackbar.open('ゲストユーザーの利用期限は7日間です。期限が過ぎると登録されたデータは閲覧できなくなります。', null, {
         duration: 3000,
         verticalPosition: 'bottom',
@@ -102,15 +126,16 @@ export class MypageComponent implements OnInit {
       });
     } else {
       this.loginStatus = false;
-      this.requestS.setAppGet('getContents');
+      this.reqObservable = this.requestS.setAppGet('getContents');
     }
 
     this.tokenError = false;
     //　上で作成したobservableを実行してコンテンツデータの取得を行う
-    this.requestS.clientOb.subscribe((result)=>{
+    this.reqObservable.subscribe((result:initItemProps)=>{
       this.username = result.username;
-      this.data = result.contents;
-      this.contentsSet();
+      this.currentGenre = 'all';
+      this.dataOrigin = result.contents;
+      this.selectGenre(this.currentGenre);
     },
     err =>{
       this.tokenError = true;
@@ -124,23 +149,23 @@ export class MypageComponent implements OnInit {
    * @returns {void}
    * @memberof MypageComponent
    * @description
-   * コンテンツが何かしら更新された時に保持データの更新とドロップダウンのタグ作成を行う
+   * コンテンツ一覧がジャンル検索で更新された時、
+   * ジャンル検索後データの保存とその検索後のデータでドロップダウンのタグ作成を行う
    */
   contentsSet() :void {
-    this.dataCurrent = this.data;
-    this.dataOrigin = this.data;
+    this.dataGenre = this.data;
     this.makeSelectTags(this.data);
   }
   /**
    * ドロップダウンのタグ作成
    * 
-   * @param {Array} value コンテンツの配列データ
+   * @param {itemProps[]} value コンテンツの配列データ
    * @returns {void}
    * @memberof MypageComponent
    * @description
-   * コンテンツが何かしら更新された時に保持データの更新とドロップダウンのタグ作成を行う
+   * タグ検索のドロップダウン作成を行う
    */
-  makeSelectTags(value:string[]) :void {
+  makeSelectTags(value:itemProps[]) :void {
     this.tagNames = [];
     for(let item of value) {
       for(let tag of item['tags'].split(',')) {
@@ -160,20 +185,23 @@ export class MypageComponent implements OnInit {
    * 既に選択されているタグがある場合さらにそのタグで絞り込みを行う
    */
   selectGenre(genreValue:string) :void {
-    if (genreValue.toString() == 'all') {
+    this.currentGenre = genreValue;
+    if (genreValue === 'all') {
       this.data = this.dataOrigin;
     } else {
-      this.data = this.dataOrigin.filter(x=>x['genre']==genreValue);
+      let filterData = [];
+      filterData.push(this.dataOrigin.filter(x=>x['genre']==genreValue));
+      this.data = filterData[0];
     }
-    
-    this.dataCurrent = this.data;
-    this.makeSelectTags(this.data);
 
+    this.contentsSet();
+    
     if(typeof this.selectTags !== 'undefined') {
       this.selecttags();
-      if (this.data.length == 0) {
+      const datalength:number = this.data.length;
+      if (datalength === 0) {
         this.searchInput = '';
-        this.data = this.dataCurrent;
+        this.data = this.dataGenre;
       }
     }
   }
@@ -186,12 +214,12 @@ export class MypageComponent implements OnInit {
    * ドロップダウンで選択されたタグに部分一致するデータをマイページに反映する
    */
   selecttags() :void {
-    this.selectTagsData = '';
+    let selectTagsData:string = '';
     for (let tag of this.selectTags) {
-      this.selectTagsData === '' ? this.selectTagsData = tag : this.selectTagsData += ' ' + tag;
+      selectTagsData === '' ? selectTagsData = tag : selectTagsData += ' ' + tag;
     }
-    this.searchInput = this.selectTagsData;
-    this.data = this.tagsearch(this.dataCurrent);
+    this.searchInput = selectTagsData;
+    this.data = this.tagsearch(this.dataGenre);
   }
   /**
    * タグ検索（入力）
@@ -202,42 +230,42 @@ export class MypageComponent implements OnInit {
    * タグ検索フォームに入力された値に部分一致するデータをマイページに反映する
    */
   search() :void {
-    this.data = this.tagsearch(this.dataCurrent);
+    this.data = this.tagsearch(this.dataGenre);
   }
   /**
    * タグ検索の実処理
    * 
-   * @returns {Array}
+   * @returns {itemProps[]}
    * @memberof MypageComponent
    * @description
    * タグ検索フォームに入力された値に部分一致するデータを返却する
    */
-  tagsearch(searchGroup:string[]) :string[] {
+  tagsearch(searchGroup:itemProps[]) :itemProps[] {
     this.searchInput = this.searchInput.replace(/　/g,' ');
     if (this.searchInput.replace(/ /g,'') == '') {
-      return this.dataCurrent;
+      return this.dataGenre;
     }
 
-    this.searchValue = this.searchInput.split(' ');
-    this.searchCount = 0;
-    for (let value of this.searchValue) {
-      if (value !== ''){this.searchCount++;}
+    const searchValue:string[] = this.searchInput.split(' ');
+    let searchCount:number = 0;
+    for (let value of searchValue) {
+      if (value !== ''){searchCount++;}
     }
-    this.dataTemp = [];
+    let dataTemp = [];
 
     for (let item of searchGroup) {
-      this.matchCount = 0;
-      for (let value of this.searchValue) {
+      let matchCount:number = 0;
+      for (let value of searchValue) {
         for (let tag of item['tags'].split(',')) {
           if(value === '') { break; }
           if(tag.includes(value)) {
-            this.matchCount++;
+            matchCount++;
           }
         }
       }
-      if (this.searchCount <= this.matchCount) {this.dataTemp.push(item);}
+      if (searchCount <= matchCount) {dataTemp.push(item);}
     }
-    return this.dataTemp;
+    return dataTemp;
   }
   /**
    * 新規登録されたコンテンツの反映
@@ -247,10 +275,13 @@ export class MypageComponent implements OnInit {
    * @description
    * 新規登録されたコンテンツデータをマイページに反映する
    */
-  dataRegist(addData:any) :void {
-    this.data.length === 0 ?
-      this.data[0] = addData:
-      this.data.unshift(addData);
+  dataRegist(addData:itemProps) :void {
+    const datalength:number = this.dataOrigin.length;
+    if ( datalength === 0) {
+      this.dataOrigin[0] = addData;
+    } else {
+      this.dataOrigin.unshift(addData);
+    }
   }
   /**
    * 更新されたコンテンツの反映
@@ -260,8 +291,8 @@ export class MypageComponent implements OnInit {
    * @description
    * 更新されたコンテンツデータをマイページに反映する
    */
-  dataEdit(editData:any) :void {
-    this.data[editData.contentsIndex] = editData;
+  dataEdit(editData:itemProps) :void {
+    this.dataOrigin[this.dataOrigin.findIndex(item=>item['id'] === editData['id'])] = editData;
   }
   /**
    * 削除されたコンテンツの反映
@@ -271,8 +302,14 @@ export class MypageComponent implements OnInit {
    * @description
    * 削除されたコンテンツデータをマイページに反映する
    */
-  dataDelete(deleteData:number) :void {
-    this.data.splice(deleteData, 1);
+  dataDelete(deleteData:itemProps) :void {
+    let filterData = [];
+    filterData.push(
+      this.dataOrigin.filter(item=>{
+        if (item['id'] !== deleteData['id']) return true;
+      })
+    );
+    this.dataOrigin = filterData[0];
   }
   /**
    * ログイン画面の表示
@@ -300,14 +337,14 @@ export class MypageComponent implements OnInit {
   /**
    * 詳細画面の表示
    * 
-   * @param {Array} item 詳細表示するコンテンツデータ
+   * @param {itemProps} item 詳細表示するコンテンツデータ
    * @param {number} index 詳細表示するコンテンツのインデックス
    * @returns {void}
    * @memberof MypageComponent
    * @description
    * モーダルで詳細画面を表示する
    */
-  detailget(item:string[], index:number) :void {
+  detailget(item:itemProps, index:number) :void {
     this.senditemS.item = item;
     this.senditemS.contentsIndex = index;
     this.modalS.open(DicdetailComponent,'detail');
@@ -321,7 +358,18 @@ export class MypageComponent implements OnInit {
    * モーダルで新規作成画面を表示する
    */
   addDic() :void {
-    this.senditemS.item = [];
+    this.senditemS.item = {
+      id: 0,
+      user_id: 0,
+      title: '',
+      url: '',
+      imageurl: '',
+      genre: '',
+      tags: '',
+      overview: '',
+      created_at: '',
+      updated_at: ''
+    };
     this.modalS.open(CreateEditComponent,'create');
   }
 

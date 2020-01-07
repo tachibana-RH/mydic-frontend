@@ -1,5 +1,18 @@
 import { Injectable } from '@angular/core';
 
+interface itemProps {
+  id: number;
+  user_id: number;
+  title: string;
+  url: string;
+  imageurl: string;
+  genre: string;
+  tags: string;
+  overview: string;
+  created_at: string;
+  updated_at: string;
+}
+
   /**
    * 各コンポーネント間でデータの受け渡しを行うDI
    * 
@@ -15,7 +28,18 @@ export class SendItemService {
 
   constructor() { }
 
-  public item:string[] = [];
+  public item:itemProps = {
+    id: 0,
+    user_id: 0,
+    title: '',
+    url: '',
+    imageurl: '',
+    genre: '',
+    tags: '',
+    overview: '',
+    created_at: '',
+    updated_at: ''
+  };
   public contentsIndex:number = 0;
 
 }

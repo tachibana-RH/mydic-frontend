@@ -2,7 +2,7 @@
     text-align: center;
     padding-top: 45px;
     padding-bottom: 45px;
-    background-color: rgb(235, 255, 252);
+    background-color: rgb(215, 215, 215);
 }
 .authbtn {
     margin-right: 20px;
@@ -46,6 +46,10 @@
 }
 ::ng-deep snack-bar-container.newregist-bar {
     color: red;
+    text-align: center;
+}
+::ng-deep snack-bar-container.newregist-success-bar {
+    color: white;
     text-align: center;
 }
 

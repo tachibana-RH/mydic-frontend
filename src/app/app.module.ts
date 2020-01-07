@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { COMPOSITION_BUFFER_MODE } from '@angular/forms'
 
 import { AppRoutingModule } from './app-routing.module';
-import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { MypageComponent } from './mypage/mypage.component';
@@ -11,6 +10,9 @@ import { DicdetailComponent, AlertDialogComponent } from './dicdetail/dicdetail.
 import { CreateEditComponent } from './create-edit/create-edit.component';
 import { ModalEntryComponent } from './mypage/modal.component';
 import { LoginComponent } from './login/login.component';
+import { ToppageComponent } from './toppage/toppage.component';
+import { PspageComponent } from './pspage/pspage.component';
+import { PolicysComponent } from './policys/policys.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule,
@@ -28,18 +30,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToppageComponent } from './toppage/toppage.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { PspageComponent } from './pspage/pspage.component';
-
-const routes:Routes = [
-  {path: '', component: ToppageComponent},
-  {path: 'mypage', component: MypageComponent},
-  {path: 'mypage/:token', component: MypageComponent},
-  {path: 'pspage', component: PspageComponent},
-  {path: 'pspage/:token', component: PspageComponent}
-]
 
 @NgModule({
   declarations: [
@@ -51,16 +43,13 @@ const routes:Routes = [
     ModalEntryComponent,
     LoginComponent,
     PspageComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    PolicysComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule,
-    RouterModule.forRoot(
-      routes, { useHash: true }
-    ),
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,

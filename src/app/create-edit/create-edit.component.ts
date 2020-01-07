@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Provider, forwardRef } from '@angular/core';
+import { FormGroup, FormControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { DicdetailComponent } from '../dicdetail/dicdetail.component';
 
@@ -35,10 +35,30 @@ function tagsConfirm(formValue: FormControl) :object {
   return checktags === ' ' ? {tagsConfirm:{valid:false}} : null;
 }
 
+// const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
+//   provide: NG_VALUE_ACCESSOR,
+//   useExisting: forwardRef(() => CreateEditComponent),
+//   multi: true
+// };
+
+interface itemProps {
+  id: number;
+  user_id: number;
+  title: string;
+  url: string;
+  imageurl: string;
+  genre: string;
+  tags: string;
+  overview: string;
+  created_at: string;
+  updated_at: string;
+}
+
 @Component({
   selector: 'app-create-edit',
   templateUrl: './create-edit.component.html',
-  styleUrls: ['./create-edit.component.scss']
+  styleUrls: ['./create-edit.component.scss'],
+  // providers: [ CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR ]
 })
 export class CreateEditComponent implements OnInit {
 
@@ -47,9 +67,18 @@ export class CreateEditComponent implements OnInit {
   public genreOption:string[];
   public tags:string[];
 
-  private contentJson:object;
   private snackRef:MatSnackBarRef<any>;
   private urlPattern:string;
+  private reqObservable:any;
+
+  // public writeValue(value: any): void {
+  // }
+ 
+  // public registerOnChange(fn: any): void {
+  // }
+ 
+  // public registerOnTouched(fn: any): void {
+  // }
 
   constructor(
     private senditemS:SendItemService,
@@ -57,26 +86,34 @@ export class CreateEditComponent implements OnInit {
     private cookieService:CookieService,
     private requestS:RequestService,
     private snackbar:MatSnackBar
-    ) { }
+    ) {
+      //　ジャンルデータ
+      this.genreOption = [
+        "study","jobs","movie","shopping","etc"
+      ];
+      //　URLのバリデーションチェックで使用する正規表現
+      this.urlPattern = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+      //　フォームグループを生成
+      this.contentsInfo = new FormGroup({
+        url: new FormControl('', [Validators.required, Validators.pattern(this.urlPattern)]),
+        genre: new FormControl('', [Validators.required]),
+        tags: new FormControl('', [Validators.required, tagsCount, tagsConfirm, Validators.maxLength(50)]),
+        title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+        overview: new FormControl('', [Validators.required, Validators.maxLength(300)])
+      });
+    }
 
   ngOnInit() {
-    //　ジャンルデータ
-    this.genreOption = [
-      "study","jobs","movie","shopping","etc"
-    ];
-    //　URLのバリデーションチェックで使用する正規表現
-    this.urlPattern = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-    //　フォームグループを生成
-    this.contentsInfo = new FormGroup({
-      url: new FormControl('', [Validators.required, Validators.pattern(this.urlPattern)]),
-      genre: new FormControl('', [Validators.required]),
-      tags: new FormControl('', [Validators.required, tagsCount, tagsConfirm, Validators.maxLength(50)]),
-      title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-      overview: new FormControl('', [Validators.required, Validators.maxLength(300)])
-    });
     //　編集モードだった場合はフォームグループに値を設定する
-    if (this.senditemS.item.length === 0) {
+    if (this.senditemS.item.id === 0) {
       this.operationName = "create";
+      this.contentsInfo.setValue({
+        url: '',
+        genre: '',
+        tags: '',
+        title: '',
+        overview: ''
+      });
     } else {
       this.operationName = "edit";
       this.contentsInfo.setValue({
@@ -197,23 +234,12 @@ export class CreateEditComponent implements OnInit {
    * DIでコンテンツ新規登録のリクエストobservableを作成し、登録したコンテンツをマイページへ反映する
    */
   create() :void {
-    this.contentsInfo.value.tags = this.contentsInfo.value.tags;
     //observableの作成
     this.cookieService.get('authToken') === '' ?
-      this.requestS.setAppPost('guestRegistContents',{contentsInfo: this.contentsInfo.value}):
-      this.requestS.setAppPost('registContents',{contentsInfo: this.contentsInfo.value});
+      this.reqObservable = this.requestS.setAppPost('guestRegistContents',{contentsInfo: this.contentsInfo.value}):
+      this.reqObservable = this.requestS.setAppPost('registContents',{contentsInfo: this.contentsInfo.value});
     //observableの実行
-    this.requestS.clientOb.subscribe((result:object)=>{
-      this.contentJson = {
-          "id": result['id'],
-          "url": result['url'],
-          "imageurl": result['imageurl'],
-          "genre": result['genre'],
-          "tags": result['tags'],
-          "title": result['title'],
-          "overview": result['overview']
-      }
-
+    this.reqObservable.subscribe((result:itemProps)=>{
       this.modalS.close();
 
       this.snackRef = this.snackbar.open('コンテンツを登録中です。少々お待ちください。', null, {
@@ -221,7 +247,7 @@ export class CreateEditComponent implements OnInit {
         verticalPosition: 'bottom',
         panelClass: ['contentsregist-bar']
       });
-      setTimeout(()=>{this.modalS.registContents(this.contentJson)},10000);
+      setTimeout(()=>{this.modalS.registContents(result)},10000);
     },
     err => {
       console.log(err);
@@ -249,11 +275,10 @@ export class CreateEditComponent implements OnInit {
     }
     //observableの作成
     this.cookieService.get('authToken') === '' ?
-      this.requestS.setAppPut('guestEditContents',{contentsId: this.senditemS.item['id'], contentsInfo: this.contentsInfo.value}):
-      this.requestS.setAppPut('editContents',{contentsId: this.senditemS.item['id'], contentsInfo: this.contentsInfo.value});
+      this.reqObservable = this.requestS.setAppPut('guestEditContents',{contentsId: this.senditemS.item['id'], contentsInfo: this.contentsInfo.value}):
+      this.reqObservable = this.requestS.setAppPut('editContents',{contentsId: this.senditemS.item['id'], contentsInfo: this.contentsInfo.value});
     //observableの実行
-    this.requestS.clientOb.subscribe((result:object) => {
-      result['contentsIndex'] = this.senditemS.contentsIndex;
+    this.reqObservable.subscribe((result:itemProps) => {
       this.modalS.close();
       if (result['url'] !== this.senditemS.item['url']) {
         this.snackRef = this.snackbar.open('コンテンツの画像を取得中です。少々お待ちください。', null, {
@@ -276,7 +301,7 @@ export class CreateEditComponent implements OnInit {
    * 編集モーダル画面から詳細モーダル画面へ変更する
    */
   cancel() :void {
-    this.senditemS.item.length === 0 ?
+    this.senditemS.item.id === 0 ?
       this.modalS.close() :
       this.modalS.open(DicdetailComponent,'detail');
   }

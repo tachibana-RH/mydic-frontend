@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RequestService } from '../request.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pspage',
@@ -13,19 +13,23 @@ export class PspageComponent implements OnInit {
   public isPwcheckDisabled:boolean;
   public resultmsg:boolean = false;
   public message:string;
+  public token:string;
 
   constructor(
     private requestS:RequestService,
-    private route: ActivatedRoute,
-    private router:Router
-    ) { }
+    private route: ActivatedRoute
+    ) {
+      this.pwControl = new FormGroup({
+        password: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
+        retrypassword: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(20)])
+      });
+    }
 
   ngOnInit() {
-    if(this.route.snapshot.paramMap['params']['token'] === undefined) {return this.router.navigate(['mypage']);}
-
-    this.pwControl = new FormGroup({
-      password: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
-      retrypassword: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(20)])
+    this.token = this.route.snapshot.paramMap['params']['token'];
+    this.pwControl.setValue({
+      password: '',
+      retrypassword: ''
     });
   }
   /**
@@ -37,14 +41,14 @@ export class PspageComponent implements OnInit {
    * DIでパスワード登録用のトークンとパスワードデータを含んだリクエストのobservableを作成し、処理後のメッセージ表示を行う
    */
   pwregist() :void {
-    this.requestS.setBasicPw('pwregist', this.pwControl.value, this.route.snapshot.paramMap['params']['token']);
-    this.requestS.clientOb.subscribe(result=>{
-      this.resultmsg = true;
+    this.requestS.setBasicPw('pwregist', this.pwControl.value, this.token)
+    .subscribe(result => {
       this.message = result.message;
+      this.resultmsg = true;
     },
     err=>{
-      this.resultmsg = true;
       this.message = err.error.message;
+      this.resultmsg = true;
     });
   }
   /**

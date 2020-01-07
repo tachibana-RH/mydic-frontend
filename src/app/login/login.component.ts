@@ -19,17 +19,18 @@ export class LoginComponent implements OnInit {
   constructor(
     private requestS:RequestService,
     private snackbar:MatSnackBar
-    ) {}
+    ) {
+      this.loginControl = new FormGroup({
+        email: new FormControl('',[Validators.required, Validators.email]),
+        password: new FormControl('',[Validators.required]),
+      });
+      this.registControl = new FormGroup({
+        name: new FormControl('',[Validators.required, Validators.maxLength(10)]),
+        email: new FormControl('',[Validators.required, Validators.email])
+      });
+    }
 
   ngOnInit() {
-    this.loginControl = new FormGroup({
-      email: new FormControl('',[Validators.required, Validators.email]),
-      password: new FormControl('',[Validators.required]),
-    });
-    this.registControl = new FormGroup({
-      name: new FormControl('',[Validators.required, Validators.maxLength(10)]),
-      email: new FormControl('',[Validators.required, Validators.email])
-    });
     this.registMessage = false;
   }
   /**
@@ -52,10 +53,17 @@ export class LoginComponent implements OnInit {
    * DIでユーザーの新規登録リクエストのobservableを作成し、処理後のメッセージ表示を行う
    */
   regist() :void {
-    this.requestS.setRegistration('signup', this.registControl.value);
-    this.requestS.clientOb.subscribe((result)=>{
-      this.registMessage = true;
-      console.log(result);
+    this.requestS.setRegistration('signup', this.registControl.value)
+    .subscribe((result)=>{
+      this.registControl.setValue({
+        name: '',
+        email: ''
+      });
+      this.snackbar.open(result.message, null, {
+        duration: 3000,
+        verticalPosition: 'top',
+        panelClass: ['newregist-success-bar']
+      });
     },
     err=>{
       this.snackbar.open(err.error.message, null, {
@@ -74,9 +82,9 @@ export class LoginComponent implements OnInit {
    * DIでベーシック認証リクエストのobservableを作成し、認証トークンの取得を行う
    */
   login() :void {
-    this.requestS.setBasic('basic', this.loginControl.value);
-    this.requestS.clientOb.subscribe((result)=>{
-      window.location.href = `/mypage/${result.token}`;
+    this.requestS.setBasic('basic', this.loginControl.value)
+    .subscribe((result)=>{
+      window.location.href = `/#/mypage/${result.token}`;
     },
     err=>{
       this.snackbar.open(err.error.message, null, {

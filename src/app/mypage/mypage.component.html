@@ -3,7 +3,7 @@
     <mat-toolbar class="toolbar" color="primary">
         <mat-toolbar-row>
             <mat-icon>search</mat-icon>
-            <span>{{username}}'s dic</span>
+            <span class="username">{{username}}'s dic</span>
             <mat-form-field class="tagsearch searchinput">
                 <mat-label>search tags</mat-label>
                 <input [(ngModel)]="searchInput" (ngModelChange)="search()" type="text" matInput matType="text" autocomplete="off">
@@ -62,7 +62,7 @@
     <div class="contents-wrapper">
         <div class="contents">
         <p *ngIf="tokenError;" style="color: red; text-align: center; font-size: 14px;">{{tokenErrorMessage}}</p>
-        <mat-card *ngFor="let item of data; index as i" class="parentcard" (click)="detailget(item, i)">
+        <mat-card id="card{{i}}" *ngFor="let item of data; index as i" class="parentcard" (click)="detailget(item, i)">
             <div class="childcardimg">
                 <img class="siteimage" src="{{item.imageurl}}">
                 <figcaption><a class="url" href="{{item.url}}" target = "_blank">{{item.url}}</a></figcaption>

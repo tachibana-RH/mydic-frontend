@@ -32,11 +32,11 @@ export class ToppageComponent implements OnInit {
    * トークンの有効期限は7日間とする
    */
   guestlogin() :void {
-    this.requestService.setAuth('guestlogin');
-    this.requestService.clientOb.subscribe((result:any)=>{
+    this.requestService.setAuth('guestlogin')
+    .subscribe((result:object)=>{
       this.expiredDate = new Date();
       this.expiredDate.setDate(this.expiredDate.getDate()+7);
-      this.cookieService.set('guestToken', result.token, this.expiredDate);
+      this.cookieService.set('guestToken', result['token'], this.expiredDate);
       this.router.navigate(['mypage']);
     },
     err =>{

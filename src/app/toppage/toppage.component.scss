@@ -1,12 +1,24 @@
+.wrapper {
+    br {
+        display: none;
+    }
+}
+h1 {
+    text-align: center;
+    color: aliceblue;
+}
 .explanations {
     width: 60%;
-    height: 450px;
+    height: auto;
     margin-right: auto;
     margin-left: auto;
     text-align: center;
+    br {
+        display: none;
+    }
 }
 .startforms {
-    margin: 2%;
+    margin: 1.5%;
     text-align: center;
 }
 .guidimg {
@@ -14,9 +26,21 @@
     padding-top: 20px;
 }
 @media screen and (max-width:710px){
+    .wrapper {
+        height: 100%;
+        h1 {
+            display: none;
+        }
+        br {
+            display: inline;
+        }
+    }
     .explanations {
         width: 85%;
         height: 400px;
+        br {
+            display: inline;
+        }
     }
     .guidimg {
         width: 300px;

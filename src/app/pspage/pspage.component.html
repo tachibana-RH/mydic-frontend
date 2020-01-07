@@ -1,5 +1,5 @@
 <mat-card class="parentcard">
-    <p *ngIf="resultmsg;">{{message}}</p>
+    <p id="resultmsg" *ngIf="resultmsg;">{{message}}</p>
     <form [formGroup]="pwControl">
         <div class="form-field"><mat-form-field>
             <input type="password" matInput matType="password"

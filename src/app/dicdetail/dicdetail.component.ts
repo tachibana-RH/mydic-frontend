@@ -6,6 +6,19 @@ import { CookieService } from 'ngx-cookie-service';
 import { CreateEditComponent } from '../create-edit/create-edit.component'
 import { MatDialog, MatDialogRef } from '@angular/material';
 
+interface itemProps {
+  id: number;
+  user_id: number;
+  title: string;
+  url: string;
+  imageurl: string;
+  genre: string;
+  tags: string;
+  overview: string;
+  created_at: string;
+  updated_at: string;
+}
+
   /**
    * 削除ボタンを押下した時に表示する確認メッセージダイアログのテンプレート
    */
@@ -40,7 +53,9 @@ export class AlertDialogComponent {
 })
 export class DicdetailComponent implements OnInit {
 
-  public item:any;
+  public item:itemProps;
+
+  private reqObservable:any;
 
   constructor(
     private senditemS:SendItemService,
@@ -81,11 +96,11 @@ export class DicdetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.cookieService.get('authToken') === ''?
-          this.requestS.setAppDelete('guestDeleteContents', {contentsId: this.senditemS.item['id']}):
-          this.requestS.setAppDelete('deleteContents', {contentsId: this.senditemS.item['id']});
+          this.reqObservable = this.requestS.setAppDelete('guestDeleteContents', {contentsId: this.senditemS.item['id']}):
+          this.reqObservable = this.requestS.setAppDelete('deleteContents', {contentsId: this.senditemS.item['id']});
         
-        this.requestS.clientOb.subscribe(result => {
-          this.modalS.deleteContents(this.senditemS.contentsIndex);
+        this.reqObservable.subscribe(result => {
+          this.modalS.deleteContents(result);
           this.modalS.close();
         },
         err => {
